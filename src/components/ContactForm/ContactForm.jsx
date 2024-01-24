@@ -4,7 +4,6 @@ import { object, string } from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectContacts } from 'redux/contacts/selectors';
 import { addContact } from 'redux/contacts/operations';
-import toast from 'react-hot-toast';
 import css from './ContactForm.module.css';
 
 const regexName = /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
@@ -36,17 +35,19 @@ export const ContactForm = () => {
   };
 
   const formSubmitHandler = data => {
- 
+    console.log('formSubmitHandler called with data:', data);
+  
     if (contacts.some(contact => contact.name === data.name)) {
-      toast.error(`${data.name} is already in contacts.`);
+      console.log(`${data.name} is already in contacts.`);
       return;
     }
     dispatch(
-      addContact({ name: data.name, number: data.number }) //Відправляємо action addContact в redux store
+      addContact({ name: data.name, number: data.number }) 
     );
-  };
+  }; 
 
-   const handleSubmit = (values, { resetForm }) => {
+  const handleSubmit = (values, { resetForm }) => {
+    console.log('Form submitted with values:', values);
     formSubmitHandler(values);
     resetForm();
   };
@@ -65,7 +66,7 @@ export const ContactForm = () => {
             className={css.input}
             name="name"
             // pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            title="Name may contain only letters, apostrophe, dash and spaces."
           />
           <ErrorMessage
             component="div"

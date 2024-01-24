@@ -17,13 +17,17 @@ export const addContact = createAsyncThunk(
   'contacts/addContact',
   async function (contact, { rejectWithValue }) {
     try {
-      const { data } = await axios.post('/contacts', contact);
-      return data;
+      const response = await axios.post('/contacts', contact);
+      if (!response.data || !response.data.id) {
+        throw new Error('Invalid server response');
+      }
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(`Failed to add contact: ${error.message}`);
     }
   }
 );
+
 
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
